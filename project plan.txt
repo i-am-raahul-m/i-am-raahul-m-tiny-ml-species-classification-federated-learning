@@ -1,0 +1,28 @@
+HARDWARE REQ {
+0. Make use of existing Raspberry Pi
+1. Buy another Raspberry Pi (4B 4gb ram)
+}
+
+DATASET {
+2. Download the raw data from iNaturalist
+    a. Southern India - TN, KL, AP, KA
+    b. Northern India - RJ, GJ, MP, UP
+3. Filter and Arrange relevant data into the project dataset
+4. Preprocess the dataset (if necessary)
+
+}
+EDGE {
+5. Edge smart queueing system -> for real-time class balanced batch creation
+6. PyTorch code for training edge models
+}
+
+FOG (optional) {
+7. Fog layer for local dataset storage
+8. Fog smart dataset sampling system -> for supplimenting lesser occuring classes with previous examples from local dataset
+}
+
+CLOUD {
+8. PyTorch code for federated learning of cloud model
+9. Model evaluations
+10. Comparison of Mixture of Experts vs. Aggregated Model
+}
