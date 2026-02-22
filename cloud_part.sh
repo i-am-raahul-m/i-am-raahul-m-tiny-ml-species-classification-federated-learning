@@ -26,95 +26,9 @@ LR=1e-4
 # -----------------------------------------------
 # CLOUD CONFIG
 # -----------------------------------------------
-CLOUD_EPOCHS=20
+CLOUD_EPOCHS=50
 CLOUD_BATCH_SIZE=16
-CLOUD_LR=1e-4
-
-# -----------------------------------------------
-# STEP 1: REGION-WISE DATASET DOWNLOAD (SAFE)
-# -----------------------------------------------
-echo ""
-echo "[EDGE | STEP 1] Checking datasets..."
-
-if [ -d "$DATASET_ROOT/north_india" ]; then
-  echo "✔ north_india already exists — skipping download"
-else
-  echo "⬇ Downloading north_india dataset"
-  python region_wise_dataset_downloader.py \
-    --dataset_root "$DATASET_ROOT" \
-    --taxon "$TAXON" \
-    --region north_india
-fi
-
-if [ -d "$DATASET_ROOT/south_india" ]; then
-  echo "✔ south_india already exists — skipping download"
-else
-  echo "⬇ Downloading south_india dataset"
-  python region_wise_dataset_downloader.py \
-    --dataset_root "$DATASET_ROOT" \
-    --taxon "$TAXON" \
-    --region south_india
-fi
-
-# -----------------------------------------------
-# STEP 2: TRAIN–VAL SPLIT (PER-REGION, SAFE)
-# -----------------------------------------------
-echo ""
-echo "[EDGE | STEP 2] Creating train/val splits (per region)..."
-
-# ---------- north_india ----------
-if [[ -d "$DATASET_ROOT/north_india/train" || \
-      -d "$DATASET_ROOT/north_india/val" ]]; then
-  echo "✔ north_india already split — skipping"
-else
-  echo "⬇ Splitting north_india dataset"
-  python region_dataset_train_val_splitter.py \
-    --dataset-root "$DATASET_ROOT" \
-    --region north_india \
-    --taxon "$TAXON" \
-    --train-ratio 0.8 \
-    --seed 42
-fi
-
-# ---------- south_india ----------
-if [[ -d "$DATASET_ROOT/south_india/train" || \
-      -d "$DATASET_ROOT/south_india/val" ]]; then
-  echo "✔ south_india already split — skipping"
-else
-  echo "⬇ Splitting south_india dataset"
-  python region_dataset_train_val_splitter.py \
-    --dataset-root "$DATASET_ROOT" \
-    --region south_india \
-    --taxon "$TAXON" \
-    --train-ratio 0.8 \
-    --seed 42
-fi
-
-
-# -----------------------------------------------
-# STEP 3: EDGE TRAINING
-# -----------------------------------------------
-echo ""
-echo "[EDGE | STEP 3] Training EDGE model: north_india"
-python "$SCRIPT_ROOT/edge_model.py" \
-  --dataset_root "$DATASET_ROOT" \
-  --edge_output_root "$EDGE_OUTPUTS" \
-  --region north_india \
-  --taxon "$TAXON" \
-  --epochs $EPOCHS \
-  --batch_size $BATCH_SIZE \
-  --lr $LR
-
-echo ""
-echo "[EDGE | STEP 3] Training EDGE model: south_india"
-python "$SCRIPT_ROOT/edge_model.py" \
-  --dataset_root "$DATASET_ROOT" \
-  --edge_output_root "$EDGE_OUTPUTS" \
-  --region south_india \
-  --taxon "$TAXON" \
-  --epochs $EPOCHS \
-  --batch_size $BATCH_SIZE \
-  --lr $LR
+CLOUD_LR=1e-3
 
 # -----------------------------------------------
 # STEP 4: CLOUD DATASET CREATION (SAFE)
@@ -134,7 +48,7 @@ else
     "$DATASET_ROOT/north_india/val/$TAXON" \
     "$DATASET_ROOT/south_india/val/$TAXON" \
   --cloud_data_dir "$CLOUD_DATA" \
-  --max_imgs_per_species 5
+  --max_imgs_per_species 50
 fi
 
 # -----------------------------------------------

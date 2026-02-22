@@ -23,8 +23,8 @@ def main():
     parser.add_argument(
         "--max_imgs_per_species",
         type=int,
-        default=5,
-        help="Max images per species to copy (default: 5)"
+        default=20,
+        help="Max images per species to copy"
     )
 
     args = parser.parse_args()
