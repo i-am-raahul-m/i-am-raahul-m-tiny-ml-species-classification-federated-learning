@@ -26,9 +26,9 @@ LR=1e-4
 # -----------------------------------------------
 # CLOUD CONFIG
 # -----------------------------------------------
-CLOUD_EPOCHS=20
+CLOUD_EPOCHS=50
 CLOUD_BATCH_SIZE=16
-CLOUD_LR=1e-4
+CLOUD_LR=1e-3
 
 # -----------------------------------------------
 # STEP 1: REGION-WISE DATASET DOWNLOAD (SAFE)
@@ -134,7 +134,7 @@ else
     "$DATASET_ROOT/north_india/val/$TAXON" \
     "$DATASET_ROOT/south_india/val/$TAXON" \
   --cloud_data_dir "$CLOUD_DATA" \
-  --max_imgs_per_species 5
+  --max_imgs_per_species 50
 fi
 
 # -----------------------------------------------
